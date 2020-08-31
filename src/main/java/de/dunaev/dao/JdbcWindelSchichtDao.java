@@ -33,7 +33,7 @@ public class JdbcWindelSchichtDao implements WindelSchichtDao {
 			ResultSet resultSet = statement.getGeneratedKeys();
 			resultSet.next();
 			schichtTO.setId(resultSet.getInt("ID"));
-			schichtTO.setParentName(resultSet.getInt("ParentId"));
+			schichtTO.setParentName(parentId);
 			schichtTO.setDate(curentDate);
 			
 		}catch (Exception e) {
@@ -56,8 +56,18 @@ public class JdbcWindelSchichtDao implements WindelSchichtDao {
 
 	@Override
 	public boolean deleteWindelSchicht(Integer id) throws DaoException {
-		// TODO Auto-generated method stub
-		return false;
+		String sql = "DELETE FROM WindelSchicht WHERE ID=?";
+		try (
+				Connection conn = DbUtil.getConnection();
+				PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);	
+		){
+			statement.setInt(1, id);
+			int result = statement.executeUpdate();
+			return result == 0 ? false : true;
+		}catch (Exception e) {
+			throw new DaoException(e);
+		}
+
 	}
 
 	@Override

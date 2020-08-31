@@ -1,5 +1,6 @@
 package de.dunaev.service;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -29,5 +30,12 @@ public class WindelSchichtResource {
 		@Produces("application/json")
 		public Response newEntry(@PathParam("parent_id") Integer id) throws DaoException{
 			return Response.ok(dao.addWindelSchicht(id)).build();
+		}
+		
+		@Path("/{id}")
+		@DELETE
+		@Produces("application/json")
+		public Response deleteEntry(@PathParam("id") Integer id) throws DaoException{
+			return Response.ok(dao.deleteWindelSchicht(id)).build();
 		}
 }
